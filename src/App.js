@@ -26,13 +26,9 @@ class App extends Component {
       }
     ]
   };
-
-  getTotalInvited = () => this.state.guests.length;
-  // getAttendingGuests = () =>
-  // getUnconfirmedGuests = () =>
-
-  // Toggle confirmed at the specified index
-  toggleConfirmationAt = indexToChange => {
+  
+  // Toggle confirmed at the specified index to change
+  toggleGuestPropertyAt = (property, indexToChange) => {
     this.setState({
       guests: this.state.guests.map((guest, index) => {
         // Make a change ONLY if the index matches the index to change
@@ -40,7 +36,7 @@ class App extends Component {
           return {
             // name: guest.name, => Instead of this we do the ..guest
             ...guest, // transfers the keys and values for entire state in one line
-            isConfirmed: !guest.isConfirmed
+            [property]: !guest[property]
           };
         }
         return guest;
@@ -48,11 +44,21 @@ class App extends Component {
     });
   };
 
+  toggleConfirmationAt = index =>
+    this.toggleGuestPropertyAt("isConfirmed", index);
+
+  toggleEditingAt = index => 
+    this.toggleGuestPropertyAt("isEditing", index);
+
   // handleAddGuest = ({ values, onSuccess }) => {
   //   this.setState({
   //     guests: this.state.guests.concat()
   //   })
   // };
+
+  getTotalInvited = () => this.state.guests.length;
+  // getAttendingGuests = () =>
+  // getUnconfirmedGuests = () =>
 
   render() {
     const { guests } = this.state;
@@ -71,6 +77,7 @@ class App extends Component {
           <GuestList
             guests={guests}
             toggleConfirmationAt={this.toggleConfirmationAt}
+            toggleEditingAt={this.toggleEditingAt}
           />
         </div>
       </div>
