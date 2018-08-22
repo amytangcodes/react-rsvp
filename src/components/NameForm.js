@@ -1,36 +1,41 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class NameForm extends Component {
-  state = { guestName: "" };
+  static propTypes = {
+    handleNameInput: PropTypes.func.isRequired,
+    pendingGuest: PropTypes.string.isRequired
+  };
 
   handleChange = event => {
-    this.setState({ guestName: event.target.value });
+    this.setState({ [event.target.name]: event.target.value });
   };
 
   handleSubmit = event => {
     event.preventDefault();
     this.props.onSubmit({
       values: {
-        guestName: this.state.guestName
+        pendingGuest: this.state.pendingGuest
       },
       onSuccess: () =>
         this.setState({
-          guestName: ""
+          pendingGuest: ""
         })
-    })
+    });
   };
 
   render() {
-    const { guestName } = this.state;
-    console.log(this.state);
+    const { handleNameInput, pendingGuest } = this.props;
+
     return (
       <form onSubmit={this.handleSubmit}>
         <input
           type="text"
-          name="guestName"
+          name="pendingGuest"
           placeholder="Invite Someone"
-          value={guestName}
-          onChange={this.handleChange}
+          value={pendingGuest}
+          onChange={handleNameInput}
+          // onChange={this.handleChange}
         />
         <button type="submit" name="submit" value="submit">
           Submit
