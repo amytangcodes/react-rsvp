@@ -77,8 +77,10 @@ class App extends Component {
 
   toggleFilter = () => this.setState({ isFiltered: !this.state.isFiltered });
 
-  handleNameChange = e => this.setState({ pendingGuest: e.target.value });
-
+  handleNameChange = e => {
+    this.setState({ pendingGuest: e.target.value });
+  };
+    
   newGuestSubmitHandler = e => {
     e.preventDefault();
     this.setState({
@@ -95,9 +97,20 @@ class App extends Component {
   };
 
   getTotalInvited = () => this.state.guests.length;
+  getPendingGuests = () => this.state.guests.filter( guest => guest.isConfirmed === false ).length;
+
+  // another way:
+  // getAttendingGuests = () => this.state.guests.reduce(
+  //   (total, guest) => guest.isConfirmed ? total + 1 : total,
+  //   0
+  // );
+  
 
   render() {
     const { title, guests, pendingGuest } = this.state;
+    const totalInvited = this.getTotalInvited();
+    const numUnconfirmed = this.getPendingGuests();
+    const numAttending = totalInvited - numUnconfirmed;
 
     return (
       <div className="App">
@@ -119,9 +132,14 @@ class App extends Component {
               Hide those who haven't responded
             </label>
           </div>
-          <Counter />
+          <Counter 
+            totalInvited={totalInvited}
+            numUnconfirmed={numUnconfirmed} 
+            numAttending={numAttending} 
+          />
           <GuestList
             guests={guests}
+            pendingGuest={pendingGuest}
             toggleConfirmationAt={this.toggleConfirmationAt}
             toggleEditingAt={this.toggleEditingAt}
             handleDelete={this.removeGuestAt}

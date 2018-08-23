@@ -1,27 +1,33 @@
-import React, { Component } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 
-class Counter extends Component {
-  state = {};
-  render() {
-    return (
-      <table className="counter">
-        <tbody>
-          <tr>
-            <td>Attending:</td>
-            <td>2</td>
-          </tr>
-          <tr>
-            <td>Unconfirmed:</td>
-            <td>1</td>
-          </tr>
-          <tr>
-            <td>Total:</td>
-            <td>3</td>
-          </tr>
-        </tbody>
-      </table>
-    );
-  }
+const Counter = ({ 
+  numAttending, 
+  numUnconfirmed, 
+  totalInvited 
+}) => (
+  <table className="counter">
+    <tbody>
+      <tr>
+        <td>Attending:</td>
+        <td>{numAttending}</td>
+      </tr>
+      <tr>
+        <td>Unconfirmed:</td>
+        <td>{numUnconfirmed}</td>
+      </tr>
+      <tr>
+        <td>Total:</td>
+        <td>{totalInvited}</td>
+      </tr>
+    </tbody>
+  </table>
+);
+
+Counter.propTypes = {
+  numAttending: PropTypes.number, 
+  numUnconfirmed: PropTypes.number, 
+  totalInvited: PropTypes.number
 }
 
 export default Counter;

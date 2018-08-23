@@ -1,9 +1,11 @@
 import React from "react";
 import Guest from "./Guest";
+import PendingGuest from "./PendingGuest";
 import PropTypes from "prop-types";
 
 const GuestList = ({
   guests,
+  pendingGuest,
   toggleConfirmationAt,
   toggleEditingAt,
   handleDelete,
@@ -11,6 +13,7 @@ const GuestList = ({
   isFiltered
 }) => (
   <ul>
+    <PendingGuest name={pendingGuest} />
     {guests
       // run filter if isFiltered is true 
       // or if guest is confirmed
@@ -32,6 +35,7 @@ const GuestList = ({
 
 GuestList.propTypes = {
   guests: PropTypes.array.isRequired,
+  pendingGuest: PropTypes.string.isRequired,
   toggleConfirmationAt: PropTypes.func.isRequired,
   toggleEditingAt: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
