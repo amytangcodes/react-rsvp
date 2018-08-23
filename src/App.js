@@ -3,37 +3,30 @@ import "./Style.css";
 import Header from "./components/Header";
 import GuestList from "./components/GuestList";
 import Counter from "./components/Counter";
+import ConfirmedFilter from "./components/ConfirmedFilter";
 
 class App extends Component {
   state = {
     title: "RSVP",
     isFiltered: false,
     pendingGuest: "",
-    guests: [
-      {
-        name: "Treasure",
-        isConfirmed: false,
-        isEditing: false
-      },
-      {
-        name: "Nick",
-        isConfirmed: true,
-        isEditing: false
-      },
-      {
-        name: "Steven",
-        isConfirmed: false,
-        isEditing: false
-      }
-    ]
+    guests: []
   };
 
+  lastGuestId = 0;
+  
+  newGuestId = () => {
+    const id = this.lastGuestId;
+    this.lastGuestId += 1;
+    return id;
+  }
+
   // Toggle confirmed at the specified index to change
-  toggleGuestPropertyAt = (property, indexToChange) => {
+  toggleGuestProperty = (property, id) => {
     this.setState({
-      guests: this.state.guests.map((guest, index) => {
+      guests: this.state.guests.map(guest => {
         // Make a change ONLY if the index matches the index to change
-        if (index === indexToChange) {
+        if (id === guest.id) {
           return {
             // name: guest.name, => Instead of this we do the ..guest
             ...guest, // transfers the keys and values for entire state in one line
@@ -45,26 +38,21 @@ class App extends Component {
     });
   };
 
-  toggleConfirmationAt = index =>
-    this.toggleGuestPropertyAt("isConfirmed", index);
+  toggleConfirmation = id =>
+    this.toggleGuestProperty("isConfirmed", id);
 
-  toggleEditingAt = index => this.toggleGuestPropertyAt("isEditing", index);
+  toggleEditing = id => 
+    this.toggleGuestProperty("isEditing", id);
 
-  removeGuestAt = index => {
-    console.log(index);
+  removeGuest = id => {
     const { guests } = this.state;
-    this.setState({ 
-      guests: [
-        ...guests.slice(0, index),
-        ...guests.slice(index + 1)
-      ] 
-    });
+    this.setState({ guests: guests.filter(guest => id !== guest.id) });
   };
 
-  setNameAt = (name, indexToChange) => {
+  setName = (name, id) => {
     this.setState({
-      guests: this.state.guests.map((guest, index) => {
-        if (index === indexToChange) {
+      guests: this.state.guests.map(guest => {
+        if (id === guest.id) {
           return {
             ...guest,
             name
@@ -83,12 +71,15 @@ class App extends Component {
     
   newGuestSubmitHandler = e => {
     e.preventDefault();
+    const id = this.newGuestId();
+    // console.log("New guest id is: ", this.newGuestId());
     this.setState({
       guests: [
         {
           name: this.state.pendingGuest,
           isConfirmed: false,
-          isEditing: false
+          isEditing: false,
+          id
         },
         ...this.state.guests
       ],
@@ -110,6 +101,9 @@ class App extends Component {
     const totalInvited = this.getTotalInvited();
     const numUnconfirmed = this.getPendingGuests();
     const numAttending = totalInvited - numUnconfirmed;
+    
+    console.log("New Guest Id:", this.newGuestId());
+    // console.log("New Guest Submit Handler:", this.newGuestSubmitHandler());
 
     return (
       <div className="App">
@@ -120,17 +114,10 @@ class App extends Component {
           newGuestSubmitHandler={this.newGuestSubmitHandler}
         />
         <div className="main">
-          <div>
-            <h2>Invitees</h2>
-            <label>
-              <input
-                type="checkbox"
-                onChange={this.toggleFilter}
-                checked={this.state.isFiltered}
-              />{" "}
-              Hide those who haven't responded
-            </label>
-          </div>
+          <ConfirmedFilter 
+            toggleFilter={this.toggleFilter}
+            isFiltered={this.state.isFiltered}
+          />
           <Counter 
             totalInvited={totalInvited}
             numUnconfirmed={numUnconfirmed} 
@@ -139,10 +126,10 @@ class App extends Component {
           <GuestList
             guests={guests}
             pendingGuest={pendingGuest}
-            toggleConfirmationAt={this.toggleConfirmationAt}
-            toggleEditingAt={this.toggleEditingAt}
-            handleDelete={this.removeGuestAt}
-            setNameAt={this.setNameAt}
+            toggleConfirmation={this.toggleConfirmation}
+            toggleEditing={this.toggleEditing}
+            handleDelete={this.removeGuest}
+            setName={this.setName}
             isFiltered={this.state.isFiltered}
           />
         </div>

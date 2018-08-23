@@ -6,11 +6,12 @@ import PropTypes from "prop-types";
 const GuestList = ({
   guests,
   pendingGuest,
-  toggleConfirmationAt,
-  toggleEditingAt,
+  toggleConfirmation,
+  toggleEditing,
   handleDelete,
-  setNameAt,
-  isFiltered
+  setName,
+  isFiltered,
+  id
 }) => (
   <ul>
     <PendingGuest name={pendingGuest} />
@@ -24,10 +25,10 @@ const GuestList = ({
           name={guest.name}
           isConfirmed={guest.isConfirmed}
           isEditing={guest.isEditing}
-          handleConfirmation={() => toggleConfirmationAt(index)}
-          handleEditing={() => toggleEditingAt(index)}
-          handleDelete={() => handleDelete(index)}
-          setName={text => setNameAt(text, index)}
+          handleConfirmation={() => toggleConfirmation(guest.id)}
+          handleEditing={() => toggleEditing(guest.id)}
+          handleDelete={() => handleDelete(guest.id)}
+          setName={text => setName(text, guest.id)}
         />
     ))}
   </ul>
@@ -36,10 +37,10 @@ const GuestList = ({
 GuestList.propTypes = {
   guests: PropTypes.array.isRequired,
   pendingGuest: PropTypes.string.isRequired,
-  toggleConfirmationAt: PropTypes.func.isRequired,
-  toggleEditingAt: PropTypes.func.isRequired,
+  toggleConfirmation: PropTypes.func.isRequired,
+  toggleEditing: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
-  setNameAt: PropTypes.func.isRequired,
+  setName: PropTypes.func.isRequired,
   isFiltered: PropTypes.bool.isRequired
 };
 

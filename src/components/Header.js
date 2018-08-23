@@ -15,24 +15,11 @@ class Header extends Component {
     return (
       <header>
         <h1>{title}</h1>
-
         <GuestNameForm 
           pendingGuest={pendingGuest}
           handleNameChange={handleNameChange}
           newGuestSubmitHandler={newGuestSubmitHandler}
         />
-        {/* <form onSubmit={newGuestSubmitHandler}>
-          <input
-            type="text"
-            name="pendingGuest"
-            placeholder="Invite Someone"
-            value={pendingGuest}
-            onChange={handleNameChange}
-          />
-          <button type="submit" name="submit" value="submit">
-            Submit
-          </button>
-        </form> */}
       </header>
     );
   }
