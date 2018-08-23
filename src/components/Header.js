@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import GuestNameForm from "./GuestNameForm";
 
 class Header extends Component {
   static propTypes = {
@@ -14,7 +15,13 @@ class Header extends Component {
     return (
       <header>
         <h1>{title}</h1>
-        <form onSubmit={newGuestSubmitHandler}>
+
+        <GuestNameForm 
+          pendingGuest={pendingGuest}
+          handleNameChange={handleNameChange}
+          newGuestSubmitHandler={newGuestSubmitHandler}
+        />
+        {/* <form onSubmit={newGuestSubmitHandler}>
           <input
             type="text"
             name="pendingGuest"
@@ -25,7 +32,7 @@ class Header extends Component {
           <button type="submit" name="submit" value="submit">
             Submit
           </button>
-        </form>
+        </form> */}
       </header>
     );
   }
